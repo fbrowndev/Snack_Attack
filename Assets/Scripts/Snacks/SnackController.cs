@@ -14,12 +14,12 @@ public class SnackController : MonoBehaviour
     [SerializeField] private LayerMask _groundLayer;
 
     [Header("Snack Ability")]
-    //public SnackAbility currentAbility;
+    public SnackAbility currentAbility; //maybe make private later
     [SerializeField] float _abilityCooldown = 5f;
     private float _abilityTimer;
 
-    //[Header("Tool")]
-    //public SnackTool equippedTool;
+    [Header("Tool")]
+    public SnackTool equippedTool; //maybe make private later
 
     private Rigidbody _rb;
     private Vector2 _moveInput;
@@ -112,9 +112,9 @@ public class SnackController : MonoBehaviour
     #region Ability Methods
     private void ActivateAbility()
     {
-        if (_currentAbility != null && _abilityTimer <= 0)
+        if (currentAbility != null && _abilityTimer <= 0)
         {
-            _currentAbility.Activate();
+            currentAbility.Activate();
             _abilityTimer = _abilityCooldown;
         }
     }
@@ -129,9 +129,9 @@ public class SnackController : MonoBehaviour
 
     private void UseTool()
     {
-        if(_equippedTool != null)
+        if(equippedTool != null)
         {
-            _equippedTool.Use();
+            equippedTool.Use();
         }
     }
 

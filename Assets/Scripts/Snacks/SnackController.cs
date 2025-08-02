@@ -21,6 +21,7 @@ public class SnackController : MonoBehaviour
     [Header("Tool")]
     public SnackTool equippedTool; //maybe make private later
 
+    private PlayerInputActions _inputActions;
     private Rigidbody _rb;
     private Vector2 _moveInput;
     private bool _isGrounded;
@@ -32,6 +33,7 @@ public class SnackController : MonoBehaviour
 
     void Awake()
     {
+        _inputActions = new PlayerInputActions();
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
     }
@@ -70,6 +72,22 @@ public class SnackController : MonoBehaviour
     void FixedUpdate()
     {
         Move();
+    }
+
+    private void OnEnable()
+    {
+        _inputActions.Player.Enable();
+        _inputActions.Player.Move.performed += OnMove;
+        _inputActions.Player.Move.canceled += OnMove;
+        _inputActions.Player.Jump.performed += OnJump;
+    }
+
+    private void OnDisable()
+    {
+        _inputActions.Player.Move.performed -= OnMove;
+        _inputActions.Player.Move.canceled -= OnMove;
+        _inputActions.Player.Jump.performed -= OnJump;
+        _inputActions.Player.Disable();
     }
 
     #region Movement Methods

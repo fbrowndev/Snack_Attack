@@ -12,6 +12,8 @@ public class SnackController : MonoBehaviour
     [SerializeField] private float _rollSpeedMultiplier = 1.5f;
     [SerializeField] private float _groundCheckDistance = 0.2f;
     [SerializeField] private LayerMask _groundLayer;
+    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private float _rotationSpeed = 720f;
 
     [Header("Snack Ability")]
     public SnackAbility currentAbility; //maybe make private later
@@ -24,6 +26,7 @@ public class SnackController : MonoBehaviour
     private PlayerInputActions _inputActions;
     private Rigidbody _rb;
     private Vector2 _moveInput;
+    private Vector2 _lookInput;
     private bool _isGrounded;
     private bool _isRolling;
     private bool _jumpPressed;
@@ -36,6 +39,8 @@ public class SnackController : MonoBehaviour
         _inputActions = new PlayerInputActions();
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+
+        
     }
 
 
@@ -67,6 +72,8 @@ public class SnackController : MonoBehaviour
         {
             ActivateAbility();
         }
+
+        PlayerRotation();
     }
 
     void FixedUpdate()
@@ -80,6 +87,8 @@ public class SnackController : MonoBehaviour
         _inputActions.Player.Move.performed += OnMove;
         _inputActions.Player.Move.canceled += OnMove;
         _inputActions.Player.Jump.performed += OnJump;
+        _inputActions.Player.Look.performed += ctx => _lookInput = ctx.ReadValue<Vector2>();
+        _inputActions.Player.Look.canceled += ctx => _lookInput = Vector2.zero;
     }
 
     private void OnDisable()
@@ -122,6 +131,44 @@ public class SnackController : MonoBehaviour
         if(_animator)
         {
             _animator.SetTrigger("Jump");
+        }
+    }
+
+    private void HandleMouseRotation()
+    {
+        Ray ray = _mainCamera.ScreenPointToRay(_lookInput);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 100f))
+        {
+            Vector3 lookDirection = hitInfo.point - transform.position;
+            lookDirection.y = 0f;
+
+            if (lookDirection.sqrMagnitude > 0.1f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            }
+        }
+    }
+
+    private void HandleStickRotation()
+    {
+        if (_lookInput.sqrMagnitude > 0.1f)
+        {
+            Vector3 direction = new Vector3(_lookInput.x, 0f, _lookInput.y);
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    private void PlayerRotation()
+    {
+        if(_inputActions.controlSchemes.ToString() == "KeyboardMouse")
+        {
+            HandleMouseRotation();
+        }
+        else
+        {
+            HandleStickRotation();
         }
     }
 

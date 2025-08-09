@@ -1,4 +1,5 @@
 using UnityEditor.Rendering.LookDev;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,6 +32,9 @@ public class SnackController : MonoBehaviour
     private bool _isRolling;
     private bool _jumpPressed;
     private Animator _animator;
+
+    [Header("Camera Settings")]
+    [SerializeField] private Transform _cameraTransform;
 
     #endregion
 
@@ -86,7 +90,7 @@ public class SnackController : MonoBehaviour
         _inputActions.Player.Enable();
         _inputActions.Player.Move.performed += OnMove;
         _inputActions.Player.Move.canceled += OnMove;
-        _inputActions.Player.Jump.performed += OnJump;
+        _inputActions.Player.Jump.performed += ctx => _jumpPressed = true;
         _inputActions.Player.Look.performed += ctx => _lookInput = ctx.ReadValue<Vector2>();
         _inputActions.Player.Look.canceled += ctx => _lookInput = Vector2.zero;
     }
@@ -104,11 +108,26 @@ public class SnackController : MonoBehaviour
     private void CheckGround()
     {
         _isGrounded = Physics.Raycast(transform.position, Vector3.down, _groundCheckDistance, _groundLayer);
+
+        // Debug visualization
+        //Color rayColor = _isGrounded ? Color.green : Color.red;
+        //Debug.DrawRay(transform.position, Vector3.down * _groundCheckDistance, rayColor);
     }
 
     private void Move()
     {
-        Vector3 movement = new Vector3(_moveInput.x, 0f, _moveInput.y) * _moveSpeed;
+
+        Vector3 camForward = _cameraTransform.forward;
+        Vector3 camRight = _cameraTransform.right;
+        camForward.y = 0f;
+        camRight.y = 0f;
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 moveDirection = (camRight * _moveInput.x + camForward * _moveInput.y).normalized;
+
+        Vector3 movement = moveDirection * _moveSpeed;
+
         Vector3 newVelocity = new Vector3(movement.x, _rb.linearVelocity.y, movement.z);
 
         if(_isRolling)
@@ -120,8 +139,15 @@ public class SnackController : MonoBehaviour
 
         if(_animator)
         {
-            _animator.SetFloat("speed", movement.magnitude);
+            _animator.SetFloat("Speed" , movement.magnitude);
         }
+
+        if(moveDirection.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10f * Time.deltaTime);
+        }
+
     }
 
     private void Jump()

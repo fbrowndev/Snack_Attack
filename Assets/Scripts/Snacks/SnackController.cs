@@ -15,13 +15,13 @@ public class SnackController : MonoBehaviour
     [Header("Tool")]
     public SnackTool equippedTool; //maybe make private later
 
-    private PlayerInputActions _inputActions;
+    //private StarterAssetsInputs _inputActions;
 
     #endregion
 
     void Awake()
     {
-        _inputActions = new PlayerInputActions();
+        //_inputActions = new PlayerInputActions();
 
         
     }
@@ -45,12 +45,12 @@ public class SnackController : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputActions.Player.Enable();
+        //_inputActions.Player.Enable();
     }
 
     private void OnDisable()
     {
-        _inputActions.Player.Disable();
+        //_inputActions.Player.Disable();
     }
 
     #region Ability Methods

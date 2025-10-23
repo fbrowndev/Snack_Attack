@@ -39,6 +39,7 @@ public class SnackController : MonoBehaviour
         if(Keyboard.current.eKey.wasPressedThisFrame)
         {
             ActivateAbility();
+            
         }
 
     }

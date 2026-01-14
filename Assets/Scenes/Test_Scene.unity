@@ -1945,35 +1945,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1259682722}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!1 &1797086404 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 554483707756335507, guid: 265f8f8058fb0374db43b78178becfd8, type: 3}
-  m_PrefabInstance: {fileID: 877746642920154622}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1797086407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1797086404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 308852775e1776b4a88a5abe9d035105, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cooldownDuration: 5
-  cooldownTimer: 0
-  _gasCloudPrefab: {fileID: 3745591530399706823, guid: 11ffa7b310c3c5e4793fea3b6d05b26c, type: 3}
-  _spawnPoint: {fileID: 0}
-  _cloudRadius: 3.5
-  _duration: 6
-  _slowPercent: 0.5
-  _affectLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  sfx: {fileID: 0}
-  sfxVolume: 0.9
 --- !u!1 &1825548515
 GameObject:
   m_ObjectHideFlags: 0
@@ -2686,6 +2657,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -4.4900017
       objectReference: {fileID: 0}
+    - target: {fileID: 4260322588042464751, guid: 265f8f8058fb0374db43b78178becfd8, type: 3}
+      propertyPath: sprint
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8676062334884735390, guid: 265f8f8058fb0374db43b78178becfd8, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -2741,7 +2716,7 @@ PrefabInstance:
     - target: {fileID: 9136160368272901429, guid: 265f8f8058fb0374db43b78178becfd8, type: 3}
       propertyPath: currentAbility
       value: 
-      objectReference: {fileID: 1797086407}
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3077873353651146867, guid: 265f8f8058fb0374db43b78178becfd8, type: 3}
     m_RemovedGameObjects: []
@@ -2750,9 +2725,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3077873353651146864, guid: 265f8f8058fb0374db43b78178becfd8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 852381996}
-    - targetCorrespondingSourceObject: {fileID: 554483707756335507, guid: 265f8f8058fb0374db43b78178becfd8, type: 3}
-      insertIndex: 7
-      addedObject: {fileID: 1797086407}
   m_SourcePrefab: {fileID: 100100000, guid: 265f8f8058fb0374db43b78178becfd8, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

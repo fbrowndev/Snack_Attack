@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7142973031351526165}
   - component: {fileID: -6906503282248385131}
   m_Layer: 0
-  m_Name: BurritoGasCloud
+  m_Name: VFX_BurritoGasCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEditor.Rendering.LookDev;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
@@ -7,36 +8,41 @@ public class SnackController : MonoBehaviour
 {
     #region Variables
 
-    [Header("Snack Ability")]
-    public SnackAbility currentAbility; //maybe make private later
-    [SerializeField] float _abilityCooldown = 5f;
-    private float _abilityTimer;
+    [Header("Loadout")]
+    [SerializeField] private SnackData _snackData;
 
-    [Header("Tool")]
-    public SnackTool equippedTool; //maybe make private later
+    [Header("Snack Attachments")]
+    [SerializeField] private SnackAbilityBase _currentAbility;
+    [SerializeField] private SnackTool _equippedTool;
 
-    //private StarterAssetsInputs _inputActions;
+
 
     #endregion
 
-    void Awake()
+    private void Awake()
     {
-        //_inputActions = new PlayerInputActions();
-
-        
+        ApplySnackData(_snackData);
     }
+
+
 
     // Update is called once per frame
     void Update()
     {
-        HandleAbilityCooldown();
+        //Tick Ability Cooldown
+        if(_currentAbility != null)
+        {
+            _currentAbility.Tick(Time.deltaTime);
+        }
 
+        //Tool input
         if(Keyboard.current.qKey.wasPressedThisFrame)
         {
             UseTool();
         }
 
-        if(Keyboard.current.eKey.wasPressedThisFrame)
+        //Ability Input
+        if (Keyboard.current.eKey.wasPressedThisFrame)
         {
             ActivateAbility();
             
@@ -44,47 +50,44 @@ public class SnackController : MonoBehaviour
 
     }
 
-    private void OnEnable()
+    public void ApplySnackData(SnackData data)
     {
-        //_inputActions.Player.Enable();
+        _snackData = data;
+
+        if(_snackData == null)
+        {
+            Debug.LogWarning($"SnackController: No SnackData assigned '{_snackData.snackName}'");
+            _currentAbility = null;
+            _equippedTool = null;
+            return;
+        }
+
+        _currentAbility = _snackData.ability != null ? Instantiate(_snackData.ability) : null;
+        _equippedTool = _snackData.startingTool;
+
+        Debug.Log($"SnackController: Applied SnackData '{_snackData.snackName}'");
     }
 
-    private void OnDisable()
-    {
-        //_inputActions.Player.Disable();
-    }
 
     #region Ability Methods
     private void ActivateAbility()
     {
-        if (currentAbility != null && _abilityTimer <= 0)
+        if(_currentAbility == null)
         {
-            currentAbility.Activate();
-            _abilityTimer = _abilityCooldown;
+            Debug.LogWarning("No ability equipped");
+            return;
         }
-    }
 
-    private void HandleAbilityCooldown()
-    {
-        if(_abilityTimer > 0)
-        {
-            _abilityTimer -= Time.deltaTime;
-        }
+        _currentAbility.Activate(gameObject);
     }
 
     private void UseTool()
     {
-        if(equippedTool != null)
+        if(_equippedTool != null)
         {
-            equippedTool.Use();
+            _equippedTool.Use();
         }
     }
-
-    #endregion
-
-
-    #region Input System Binds
-    
 
     #endregion
 }

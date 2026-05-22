@@ -45,7 +45,24 @@ public class SnackController : MonoBehaviour
 
     private void OnEnable()
     {
+<<<<<<< Updated upstream
         //_inputActions.Player.Enable();
+=======
+        _snackData = data;
+
+        if(_snackData == null)
+        {
+            //Debug.LogWarning($"SnackController: No SnackData assigned '{_snackData.snackName}'");
+            _currentAbility = null;
+            _equippedTool = null;
+            return;
+        }
+
+        _currentAbility = _snackData.ability != null ? Instantiate(_snackData.ability) : null;
+        _equippedTool = _snackData.startingTool;
+
+        Debug.Log($"SnackController: Applied SnackData '{_snackData.snackName}'");
+>>>>>>> Stashed changes
     }
 
     private void OnDisable()

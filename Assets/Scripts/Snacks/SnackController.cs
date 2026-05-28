@@ -52,9 +52,7 @@ public class SnackController : MonoBehaviour
 
     public void ApplySnackData(SnackData data)
     {
-<<<<<<< Updated upstream
         //_inputActions.Player.Enable();
-=======
         _snackData = data;
 
         if(_snackData == null)
@@ -69,14 +67,8 @@ public class SnackController : MonoBehaviour
         _equippedTool = _snackData.startingTool;
 
         Debug.Log($"SnackController: Applied SnackData '{_snackData.snackName}'");
->>>>>>> Stashed changes
     }
-
-        _currentAbility = _snackData.ability != null ? Instantiate(_snackData.ability) : null;
-        _equippedTool = _snackData.startingTool;
-
-        Debug.Log($"SnackController: Applied SnackData '{_snackData.snackName}'");
-    }
+        
 
 
     #region Ability Methods
